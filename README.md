@@ -46,3 +46,5 @@ pnpm build
 ```sh
 pnpm lint
 ```
+
+# vue-github-actions
