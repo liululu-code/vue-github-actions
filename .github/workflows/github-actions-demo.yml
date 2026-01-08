@@ -48,7 +48,7 @@ jobs:
       # 部署到服务器
       - name: Deploy to server
         run: |
-          rsync -avz --delete -e "ssh -p 6000" dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_PATH }}
+          rsync -avz -e "ssh -p 6000" dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_DIST_PATH }}
 
 
 
