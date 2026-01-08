@@ -17,7 +17,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'pnpm' # 启用 pnpm 缓存
 
+      # 安装 pnpm
       - name: Set up pnpm
         uses: pnpm/action-setup@v3
         with:
@@ -30,4 +32,21 @@ jobs:
       # 构建 Vue 项目
       - name: Build Vue Project
         run: pnpm run build
+
+
+      # 配置SSH
+      - name: Setup SSH
+        uses: | 
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p 6000 -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+
+      # 部署到服务器
+      - name: Deploy to server
+        run: |
+          rsync -avz --delete -e "ssh -p 6000" dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_PATH }}
+
+
 
